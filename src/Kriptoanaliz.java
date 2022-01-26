@@ -182,16 +182,16 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 		    rezult=kodDekod(str_for_work,kay);
 	       break;
 		case 3: 
-			int nidKluch=0; String varDekod; boolean pRcheckWhiteSpaces; boolean pRpunctuationMarks; boolean pRcountLit;
+		int nidKluch=0; String varDekod; boolean pRcheckWhiteSpaces=false; boolean pRpunctuationMarks=false; boolean pRcountLit=false;
 			for(i=1;i<STABC.length()-1;i++) {
 				varDekod= kodDekod(str_for_work,i); pRcheckWhiteSpaces=checkWhiteSpaces(varDekod);pRpunctuationMarks=punctuationMarks(varDekod);pRcountLit=countLit(varDekod);
 				if(pRcheckWhiteSpaces&&pRpunctuationMarks&&pRcountLit) {
 					nidKluch=STABC.length()-i;rezult=kodDekod(str_for_work,i);
 			 System.out.println("Файл успешно раскодирован! Подобранный ключ: "+nidKluch+" "+rezult);
 			 			break;
-			}
-				if(!pRcheckWhiteSpaces||!pRpunctuationMarks||!pRcountLit) {System.out.println(" Не удалось подобрать ключ: "+i+pRcheckWhiteSpaces+pRpunctuationMarks+pRcountLit);}
-				}	
+			}}
+				if(!pRcheckWhiteSpaces&&!pRpunctuationMarks&&!pRcountLit) {System.out.println(" Не удалось подобрать ключ: ");}
+				
 	    break;
 		case 4:
 			System.out.println("Введите путь к файлу для анализа");
