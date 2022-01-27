@@ -49,7 +49,7 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 	    	  if(STABC.indexOf(charTextForShifr[i])==-1) {
 	    		  rezults=rezults+charTextForShifr[i];    }
 	} return rezults;}
-	//старый метод проверки на длину строки
+	//старый метод проверки на длину слова
 	/*public static boolean checkWhiteSpaces(String strForProv) {int poz=0; boolean par=true;
 		
 		for(int i=poz;i<strForProv.length();) {
@@ -65,8 +65,12 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 	String[] masWord=strForProv.split(" ");
 	for(int i=0;i<masWord.length;i++) {
 		if(masWord.length<2) {par= false;break;}else {
-		if(masWord[i].length()>24&&masWord[i].split(".").length==0&&masWord[i].split(",").length==0&&masWord[i].split("?").length==0&&masWord[i].split("!").length==0&&masWord[i].split(":").length==0&&masWord[i].split(";").length==0) {
-			par= false;break;}
+		if(masWord[i].length()>24) {
+			poz++;	
+			if(poz*100/masWord.length>10) {
+			par= false;//System.out.println("Длинное слово "+(poz*100/masWord.length));
+			break;}}
+		
 		}
 
 		}
@@ -74,21 +78,26 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 	return par;
 }
 	//проверка на наличие пробела после знаков пунктуации
-	public static boolean punctuationMarks(String strForProv1) {boolean par1=true; int countFals=0;int countMarks=0;
+	public static boolean punctuationMarks(String strForProv1) {boolean par1=true; int countFals=0;int countMarks=1;
 	char [] strForProvInChar=strForProv1.toCharArray();
 	for(int i=0;i<strForProv1.length()-1;i++) {
 		if(strForProvInChar[i]=='.'||strForProvInChar[i]==','||strForProvInChar[i]==';'||strForProvInChar[i]==':'||strForProvInChar[i]=='!'||strForProvInChar[i]=='?'){countMarks++;
 		if((strForProvInChar[i]=='.'||strForProvInChar[i]==','||strForProvInChar[i]==';'||strForProvInChar[i]==':'||strForProvInChar[i]=='!'||strForProvInChar[i]=='?')&&strForProvInChar[i+1]!=' '){
-			countFals++;
-						if(countFals*100/countMarks>10) {par1=false; break;}
-		}	}}
+			countFals++;			
+		}
+	
+		}}	if(countFals*100/countMarks>10) { par1=false; //System.out.println("Нет пробелов "+countFals+" i "+countMarks);
+		}	
 	return par1;}
+			   
 	//проверка на количество символов между гласными
-	public static boolean countLit(String strForProv2) {boolean par2=true; String glas="аоуеыиэяю"; int pozGl=0;
+	public static boolean countLit(String strForProv2) {boolean par2=true; String glas="аоуеыиэяю"; int pozGl=0; int countMark=0;
 	char [] strForProvInChar2=strForProv2.toCharArray();
 	for(int i=0;i<strForProvInChar2.length-1;i++) {  
-		if(i-pozGl>14){par2=false;//System.out.println("Не подходящая строка"+strForProv2.substring(pozGl,i));
-		break;}
+		if(i-pozGl>18){countMark++;
+		if(countMark*100/strForProvInChar2.length>10) {
+			par2=false;//System.out.println("Много согласных"+countMark*100/strForProvInChar2.length);
+		break;}}
 		
 		if(glas.indexOf(strForProvInChar2[i])!=-1) {pozGl=i;}
 			}
@@ -120,9 +129,9 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 	public static HashMap comparisonMap(HashMap<Character, Double> mapForcomparison1,HashMap<Character, Double> mapForcomparison2) {
 		HashMap<Character, Character> mapComparison = new HashMap<>();
 		   Character[] keysMapForcomparison1 = mapForcomparison1.keySet().toArray(new Character[0]);
-	       System.out.println("Ключи зашифрованой строки: " + keysMapForcomparison1);
+	      // System.out.println("Ключи зашифрованой строки: " + keysMapForcomparison1);
 	       Character[] keysMapForcomparison2 = mapForcomparison2.keySet().toArray(new Character[0]);
-	       System.out.println("Ключи строки для анализа:  " + keysMapForcomparison2);
+	     //  System.out.println("Ключи строки для анализа:  " + keysMapForcomparison2);
 	       for(int i=0;i<keysMapForcomparison2.length;i++) {
 	    	//   System.out.println(i+"  " +keysMapForcomparison1[i]+"  " + keysMapForcomparison2[i]);
 	    	   mapComparison.put(keysMapForcomparison1[i],keysMapForcomparison2[i]);	    	   
@@ -169,7 +178,6 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 	
 		switch(zas) {
 		case 1:
-			System.out.println(STABC);
 			System.out.println("Введите ключ");
 			String kluch = sc.nextLine();
 			int kay=getKey(kluch);//System.out.println(kay);
@@ -182,15 +190,15 @@ public class Kriptoanaliz {static String wayForRezult="C:\\file1.txt";
 		    rezult=kodDekod(str_for_work,kay);
 	       break;
 		case 3: 
-		int nidKluch=0; String varDekod; boolean pRcheckWhiteSpaces=false; boolean pRpunctuationMarks=false; boolean pRcountLit=false;
-			for(i=1;i<STABC.length()-1;i++) {
+			int nidKluch=0; String varDekod; boolean pRcheckWhiteSpaces=false; boolean pRpunctuationMarks=false; boolean pRcountLit=false;
+			for(i=0;i<STABC.length()-1;i++) {
 				varDekod= kodDekod(str_for_work,i); pRcheckWhiteSpaces=checkWhiteSpaces(varDekod);pRpunctuationMarks=punctuationMarks(varDekod);pRcountLit=countLit(varDekod);
 				if(pRcheckWhiteSpaces&&pRpunctuationMarks&&pRcountLit) {
 					nidKluch=STABC.length()-i;rezult=kodDekod(str_for_work,i);
-			 System.out.println("Файл успешно раскодирован! Подобранный ключ: "+nidKluch+" "+rezult);
+			 System.out.println("Файл успешно раскодирован! Подобранный ключ: "+nidKluch);
 			 			break;
 			}}
-				if(!pRcheckWhiteSpaces&&!pRpunctuationMarks&&!pRcountLit) {System.out.println(" Не удалось подобрать ключ: ");}
+				if(!pRcheckWhiteSpaces||!pRpunctuationMarks||!pRcountLit) {System.out.println(" Не удалось подобрать ключ: ");}
 				
 	    break;
 		case 4:
